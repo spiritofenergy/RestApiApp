@@ -13,6 +13,7 @@ class PostRepository @Inject constructor(
     suspend fun getAllPosts(): NetworkResult<List<PostResponse>>{
         return safeApiCall { remoteDataSource.getAllPosts() }
     }
+    fun getPagingAllPost() = remoteDataSource.getPagingAllPost()
     suspend fun postPost(body: PostResponse): NetworkResult<PostResponse>{
         return safeApiCall { remoteDataSource.postPosts(body = body) }
     }

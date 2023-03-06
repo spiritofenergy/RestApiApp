@@ -9,6 +9,8 @@ interface PostService {
 
     @GET("/posts")
     suspend fun getAllPost(): Response<List<PostResponse>>
+ @GET("/posts")
+    suspend fun getPagingAllPost(@Query("_start")pager: Int, @Query("-limit")limit: Int): Response<List<PostResponse>>
 
     @POST("/posts")
     suspend fun postPost(@Body body: PostResponse): Response<PostResponse>

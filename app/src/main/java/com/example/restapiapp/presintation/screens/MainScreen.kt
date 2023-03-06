@@ -21,14 +21,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.example.restapiapp.data.api.models.PostResponse
 import com.example.restapiapp.ui.theme.RestApiAppTheme
 import com.example.restapiapp.utils.NetworkResult
 
 @Composable
 fun MainScreen (mainViewModel: MainViewModel){
-    val state = mainViewModel.allPostResponse.observeAsState().value ?: NetworkResult.Loading()
+    val data = mainViewModel.getPagingAllPost().collectAsLazyPagingItems()
+    
+    LazyColumn{
+        items(data){post ->
+            post?.let { PostItem(item = it) }
+        }
+        item{
+            when(val state = data.loadState.refresh){
+                is LoadState.Error ->{
+                    ErrorScreen(message = state.error.message ?: "Some Error")
+                }
+                is LoadState.Loading -> {
+                    LoadingScreen()
+                }else -> {}
+            }
+        }
+    }
+    
 
+
+ /*   val state = mainViewModel.allPostResponse.observeAsState().value ?: NetworkResult.Loading()
     when(state){
         is NetworkResult.Success ->{
             SuccessScreen(state.data ?: listOf(), mainViewModel)
@@ -39,7 +61,7 @@ fun MainScreen (mainViewModel: MainViewModel){
         is NetworkResult.Loading ->{
             LoadingScreen()
         }
-    }
+    }*/
 }
 
 @Composable

@@ -26,16 +26,18 @@ class MainViewModel @Inject constructor(
     get() = _allPostsResponse
 
     init {
-        getAllPosts()
+        getPagingAllPost()
+        //getAllPosts()
     }
+    fun getPagingAllPost() = getAllPostsUseCase.invokePaging()
 
-    private fun getAllPosts() {
+  /*  private fun getAllPosts() {
         viewModelScope.launch {
             getAllPostsUseCase.invoke().let {
                 _allPostsResponse.value = it
             }
         }
-    }
+    }*/
     fun postPosts(){
         viewModelScope.launch {
             postPostUseCase.invoke(body = PostResponse(title = "Test title", body = "Test body"))
